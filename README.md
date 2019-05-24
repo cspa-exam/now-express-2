@@ -6,6 +6,9 @@ Candidate-facing APIs for our takehome assessments.
 
 ```bash
 $ yarn
+# In one tab
+$ tsc --watch
+# In another
 $ yarn test-dev
 ```
 
