@@ -5,15 +5,8 @@ import journal from './apis/journal'
 
 const app = express()
 
-// app.use(bodyParser.json())
-// app.use(journal)
-
-app.get('/', (req, res) => {
-  res.send('one111')
-})
-app.get('/', (req, res) => {
-  res.send('two222')
-})
+app.use(bodyParser.json())
+app.use(journal)
 
 export default app
 
