@@ -1,4 +1,4 @@
-# CSPA Assessment APis
+# CSPA Assessment APIs
 
 Candidate-facing APIs for our takehome assessments.
 
