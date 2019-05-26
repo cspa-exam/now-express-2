@@ -14,4 +14,4 @@ $ yarn test-dev
 
 ## Deployment
 
-The `master` branch is automatically deployed to [zeit](https://zeit.co/cspa/assessment-apis).
+The `master` branch is automatically deployed to [heroku](https://dashboard.heroku.com/apps/cspa-assessment-apis).

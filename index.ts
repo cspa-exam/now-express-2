@@ -5,6 +5,14 @@ import journal from './apis/journal'
 
 const app = express()
 
+app.use((req, res, next) => {
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+  })
+  next()
+})
 app.use(bodyParser.json())
 app.use(journal)
 
