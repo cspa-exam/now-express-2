@@ -85,14 +85,17 @@ function generateEntries (): Entry[] {
     {
       id: entryIdCounter++,
       title: 'My Entry 1',
-      body: loremIpsum({ count: 3 }),
+      summary: loremIpsum({ count: 3 }),
       createdAt: 1552374000000,
     },
     {
       id: entryIdCounter++,
       title: 'My Entry 2',
-      body: loremIpsum({ count: 4 }),
+      summary: loremIpsum({ count: 4 }),
       createdAt: 1552719600000,
     },
-  ]
+  ].map(entry => ({
+    ...entry,
+    body: `<p>${entry.summary}</p>\n` + loremIpsum({ count: 4, units: 'paragraph', format: 'html' }),
+  }))
 }
