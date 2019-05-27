@@ -12,8 +12,9 @@ type Journal = {
 
 type Entry = {
   id: number
-  title:  string
+  title: string
   body: string
+  summary: string
   createdAt: number
 }
 
@@ -33,7 +34,11 @@ router.get('/journals/:id', (req, res) => {
 
 router.get('/journals/:id/entries', (req, res) => {
   const journal = getOrCreateJournal(req.params.id)
-  res.send(journal.entries)
+  res.send(journal.entries.map(entry => {
+    const copy = {...entry}
+    delete copy.body
+    return copy
+  }))
 })
 
 router.post('/journals/:id/entries', (req, res) => {
@@ -42,10 +47,14 @@ router.post('/journals/:id/entries', (req, res) => {
   if (!req.body.title) return res.status(400).send('missing_title')
 
   const journal = getOrCreateJournal(req.params.id)
+
+  const paragraphs = (req.body.body as string).split('\n\n')
+
   const newEntry: Entry = {
     id: entryIdCounter++,
     title: req.body.title,
-    body: req.body.body,
+    summary: paragraphs[0],
+    body: paragraphs.map(content => `<p>${content}</p>`).join('\n'),
     createdAt: Date.now(),
   }
   journal.entries.push(newEntry)

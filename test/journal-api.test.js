@@ -28,30 +28,54 @@ describe('Journal API', function() {
 
           assert.equal(entries[0].title, 'My Entry 1')
           assert.equal(typeof entries[0].id, 'number')
-          assert.equal(typeof entries[0].body, 'string')
           assert.equal(typeof entries[0].summary, 'string')
           assert.equal(typeof entries[0].createdAt, 'number')
-          assert.ok(entries[0].body.length > entries[0].summary.length)
-          assert.ok(entries[0].body.indexOf('<p>') >= 0, 'body should be html')
-          assert.ok(entries[0].summary.indexOf('<p>') === -1, 'summary SHOULD NOT be html')
+
+          assert.ok('body' in entries[0] === false, 'body should not be provided')
 
           assert.equal(entries[1].title, 'My Entry 2')
           assert.equal(typeof entries[1].id, 'number')
-          assert.equal(typeof entries[1].body, 'string')
           assert.equal(typeof entries[1].summary, 'string')
           assert.equal(typeof entries[1].createdAt, 'number')
-          assert.ok(entries[1].body.length > entries[1].summary.length)
-          assert.ok(entries[1].body.indexOf('<p>') >= 0, 'body should be html')
-          assert.ok(entries[1].summary.indexOf('<p>') === -1, 'summary SHOULD NOT be html')
+
+          assert.ok('body' in entries[1] === false, 'body should not be provided')
         })
 
       await request(app)
         .get(`/journals/${id}/entries/${entries[0].id}`)
         .expect(200)
         .expect(res => {
-          assert.deepEqual(res.body, entries[0])
+          const entry = res.body
+          assert.ok(typeof entry.body === 'string', 'Body should be included')
+          delete entry.body
+          assert.deepEqual(entry, entries[0])
         })
     }
+  })
+
+  it('yields the body for an individual entry', async function () {
+    let journal_id = 144
+    let entries
+
+    await request(app)
+      .get(`/journals/${journal_id}/entries`)
+      .expect(200)
+      .expect(res => {
+        entries = res.body
+      })
+
+    await request(app)
+      .get(`/journals/${journal_id}/entries/${entries[0].id}`)
+      .expect(200)
+      .expect(res => {
+        const entry = res.body
+        assert.equal(typeof entry.body, 'string')
+        assert.equal(typeof entry.summary, 'string')
+
+        assert.ok(entry.body.length > entry.summary.length)
+        assert.ok(entry.body.indexOf('<p>') >= 0, 'body should be html')
+        assert.ok(entry.summary.indexOf('<p>') === -1, 'summary SHOULD NOT be html')
+      })
   })
 
   it('posts a new journal entry', async function () {
@@ -80,7 +104,7 @@ describe('Journal API', function() {
       .expect(res => {
         newEntry = res.body
         assert.equal(newEntry.title, payload.title)
-        assert.equal(newEntry.body, payload.body)
+        assert.equal(newEntry.body, `<p>hi</p>`)
         assert.equal(typeof newEntry.id, 'number')
         assert.equal(typeof newEntry.createdAt, 'number')
       })
@@ -88,7 +112,8 @@ describe('Journal API', function() {
     await request(app)
       .get(`/journals/${id}/entries`)
       .expect(res => {
-        assert.deepEqual(res.body, entries.concat([newEntry]))
+        delete newEntry.body
+        assert.deepEqual(res.body, entries.concat([ newEntry ]))
       })
   })
 
