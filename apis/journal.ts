@@ -1,3 +1,4 @@
+import {loremIpsum} from "lorem-ipsum"
 import {Router} from 'express'
 
 type journal_id = number
@@ -83,15 +84,15 @@ function generateEntries (): Entry[] {
   return [
     {
       id: entryIdCounter++,
-      title: 'My Entry 2',
-      body: `Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`,
-      createdAt: 1552719600000,
+      title: 'My Entry 1',
+      body: loremIpsum({ count: 3 }),
+      createdAt: 1552374000000,
     },
     {
       id: entryIdCounter++,
-      title: 'My Entry 1',
-      body: `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-      createdAt: 1552374000000,
-    }
+      title: 'My Entry 2',
+      body: loremIpsum({ count: 4 }),
+      createdAt: 1552719600000,
+    },
   ]
 }

@@ -26,12 +26,12 @@ describe('Journal API', function() {
           entries = res.body
           assert.equal(entries.length, 2)
 
-          assert.equal(entries[0].title, 'My Entry 2')
+          assert.equal(entries[0].title, 'My Entry 1')
           assert.equal(typeof entries[0].id, 'number')
           assert.equal(typeof entries[0].body, 'string')
           assert.equal(typeof entries[0].createdAt, 'number')
 
-          assert.equal(entries[1].title, 'My Entry 1')
+          assert.equal(entries[1].title, 'My Entry 2')
           assert.equal(typeof entries[1].id, 'number')
           assert.equal(typeof entries[1].body, 'string')
           assert.equal(typeof entries[1].createdAt, 'number')
